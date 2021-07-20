@@ -1,4 +1,7 @@
+#pip install xlsxwriter
+#pip install xlrd
 #pip install xlrd==1.2.0
+
 import ccxt
  
 ftx = ccxt.ftx({
@@ -78,16 +81,16 @@ def rebalance ():
     elif bullet >= 0 :  
           ftx.create_order('XRP/USD','market','sell',bullet)      
           v = bullet * lastPrice  
-           
+                     
           messenger.sendtext('Sell XRP %.2f' % v + 'USD @ ' + str (lastPrice)+'USD')   
                      
-                      #อ่านและบันทึกลง Excel         
+                   #สร้างตารางและดึงประวัติกำหนดคอลัม   
           df = pd.DataFrame(ftx.fetchMyTrades('XRP/USD'),
                    columns=['datetime','side','price','amount','cost'])      
-
-          sell = df.tail(1)
+                   
+          sell = df.tail(1)  #ทำให้ประวัติเหลือบรรทัดสุดท้ายเพียง 1บรรทัด เพื่อนำข้อมูลไปใช้
           print(sell)          
-          
+                   #อ่านและบันทึกลง Excel  
           readDf = pd.read_excel(r'all.xlsx')
           frames = [readDf, sell]
           result = pd.concat(frames)
